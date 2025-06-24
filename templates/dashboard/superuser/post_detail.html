@@ -1,0 +1,54 @@
+{% extends "dashboard/superuser/superuser_dashboard.html" %}
+
+{% block dashboard_content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">{{ post.title }}</h1>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="text-muted">By: {{ post.author.username }}</h5>
+            <p class="card-text">{{ post.content }}</p>
+            <p class="text-muted"><small>Published on: {{ post.created_at }}</small></p>
+
+            <!-- Back Button -->
+            <a href="{% url 'users:post_list' %}" class="btn btn-secondary btn-sm">Back to Posts</a>
+        </div>
+    </div>
+
+    <!-- 🗨️ Comments Section -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Comments</h5>
+        </div>
+        <div class="card-body">
+            {% for comment in comments %}
+                <div class="comment p-2 mb-2 border rounded">
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                    <p class="text-muted"><small>{{ comment.created_at }}</small></p>
+
+                    {% comment %} <!-- Delete Comment Button for Superuser -->
+                    <form method="POST" action="{% url 'users:post_detail' post.id %}" onsubmit="return confirm('Delete this comment?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form> {% endcomment %}
+                </div>
+            {% empty %}
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+            {% endfor %}
+        </div>
+
+        <!-- 📝 Add Comment Form -->
+        <div class="card-footer">
+            <form method="POST" action="{% url 'post:post_comment' post.id %}">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <textarea name="content" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

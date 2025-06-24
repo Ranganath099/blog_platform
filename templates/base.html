@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="#">Blogs</a>
+          <!-- Navbar Toggler Button -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <!-- Collapsible Menu -->
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item"><a class="nav-link active" href="{% url 'users:home' %}">Home</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+              </ul>
+  
+              <!-- User Authentication Links -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'users:logout' %}" class="btn btn-outline-light ms-2">Logout</a>
+              {% else %}
+              <a href="{% url 'users:login' %}" class="btn btn-outline-light ms-2">Login</a>
+              <a href="{% url 'users:register' %}" class="btn btn-outline-light ms-2">Signup</a>
+              {% endif %}
+          </div>
+      </div>
+    </nav>
+  {% block content %}{% endblock  %}
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF8zODx1k1hKxcGUpz9t4JpFAhxc0hMd5jCwKzE6MK9G7tG6ZgC" crossorigin="anonymous"></script>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5 pb-4">
+        <div class="container text-center text-md-left">
+          <div class="row text-center text-md-left">
+            <!-- About Section -->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h5 class="text-uppercase mb-4 font-weight-bold text-warning">About Us</h5>
+              <p>
+                Welcome to our blog! We share insightful articles, news, and stories on various topics. Stay inspired with our latest updates.
+              </p>
+            </div>
+      
+            <!-- Links Section -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Quick Links</h5>
+              <p><a href="#!" class="text-white" style="text-decoration: none;">Home</a></p>
+              <p><a href="#!" class="text-white" style="text-decoration: none;">Blog</a></p>
+              <p><a href="#!" class="text-white" style="text-decoration: none;">About</a></p>
+              <p><a href="#!" class="text-white" style="text-decoration: none;">Contact</a></p>
+            </div>
+      
+            <!-- Social Media Section -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Follow Us</h5>
+              <p><a href="#" class="text-white" style="text-decoration: none;"><i class="fab fa-facebook-f mr-2"></i> Facebook</a></p>
+              <p><a href="#" class="text-white" style="text-decoration: none;"><i class="fab fa-twitter mr-2"></i> Twitter</a></p>
+              <p><a href="#" class="text-white" style="text-decoration: none;"><i class="fab fa-instagram mr-2"></i> Instagram</a></p>
+              <p><a href="#" class="text-white" style="text-decoration: none;"><i class="fab fa-linkedin-in mr-2"></i> LinkedIn</a></p>
+            </div>
+      
+            <!-- Contact Info Section -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h5 class="text-uppercase mb-4 font-weight-bold text-warning">Contact</h5>
+              <p><i class="fas fa-home mr-3"></i> 123 Blog Street, City Name</p>
+              <p><i class="fas fa-envelope mr-3"></i> blog@example.com</p>
+              <p><i class="fas fa-phone mr-3"></i> +123 456 7890</p>
+              <p><i class="fas fa-print mr-3"></i> +123 456 7891</p>
+            </div>
+          </div>
+      
+          <hr class="mb-4">
+          <div class="row align-items-center">
+            <!-- Copyright -->
+            <div class="col-md-7 col-lg-8">
+              <p class="text-center text-md-left">
+                © 2025 All Rights Reserved by:
+                <a href="#" style="text-decoration: none;">
+                  <strong class="text-warning"> BlogSite</strong>
+                </a>
+              </p>
+            </div>
+      
+            <!-- Social Media Icons -->
+            <div class="col-md-5 col-lg-4">
+              <div class="text-center text-md-right">
+                <ul class="list-unstyled list-inline">
+                  <li class="list-inline-item">
+                    <a href="#" class="btn-floating btn-sm text-white" style="font-size: 20px;">
+                      <i class="fab fa-facebook-f"></i>
+                    </a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="btn-floating btn-sm text-white" style="font-size: 20px;">
+                      <i class="fab fa-twitter"></i>
+                    </a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="btn-floating btn-sm text-white" style="font-size: 20px;">
+                      <i class="fab fa-instagram"></i>
+                    </a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#" class="btn-floating btn-sm text-white" style="font-size: 20px;">
+                      <i class="fab fa-linkedin-in"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+      
+      
+      <!-- Add Font Awesome for social icons -->
+      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+      <!-- Bootstrap JS (Fixed Version) -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

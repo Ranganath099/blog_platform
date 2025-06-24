@@ -1,0 +1,41 @@
+{% extends "dashboard/superuser/superuser_dashboard.html" %}
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-header"><h4>Authors List</h4></div>
+    <div class="card-body">
+        <table class="table">
+            <thead><tr><th>#</th><th>Username</th><th>Email</th><th>Profile</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+                {% for author in authors %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ author.author_profile.username }}</td>
+                    <td>{{ author.email }}</td>
+                    <td>
+                        {% with profile=author.authorprofile %}
+                            {{ profile.bio|default:"No profile data" }}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        <span class="badge {% if author.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if author.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'users:toggle_user_active' author.id %}" class="btn btn-warning btn-sm">
+                            {% if author.is_active %}Deactivate{% else %}Activate{% endif %}
+                        </a>
+                        <form action="{% url 'users:delete_user' user.id %}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center text-muted">No authors found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

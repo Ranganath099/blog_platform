@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-center min-vh-100">
+    <div class="bg-white p-4 rounded-3 shadow-lg w-50">
+        <h2 class="text-center text-dark mb-4">Create an Account</h2>
+
+        <form id="registerForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Email or Phone -->
+            <div class="mb-3">
+                <label class="form-label">Email or Phone</label>
+                <input type="text" id="identifier" name="identifier" class="form-control">
+                <p id="identifierError" class="text-danger small d-none">Email or Phone is required.</p>
+                {% if form.identifier.errors %}
+                    <p class="text-danger small">{{ form.identifier.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" id="password1" name="password1" class="form-control">
+                <p id="passwordError" class="text-danger small d-none">Password must be at least 6 characters.</p>
+                {% if form.password1.errors %}
+                    <p class="text-danger small">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" id="password2" name="password2" class="form-control">
+                <p id="confirmPasswordError" class="text-danger small d-none">Passwords do not match.</p>
+                {% if form.password2.errors %}
+                    <p class="text-danger small">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Role Selection -->
+            <div class="mb-3">
+                <label class="form-label">Register as</label>
+                <select id="roleSelect" name="role" class="form-select">
+                    <option value="">Select a Role</option>
+                    <option value="user">User</option>
+                    <option value="author">Author</option>
+                </select>
+                <p id="roleError" class="text-danger small d-none">Please select a role.</p>
+            </div>
+
+            <!-- Author-Specific Fields -->
+            <div id="author-fields" class="border rounded p-3 bg-light d-none">
+                <h5 class="text-secondary">Author Details</h5>
+                <div class="mb-2">
+                    <label class="form-label">Bio</label>
+                    <textarea id="bio" name="bio" class="form-control"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" id="profile_picture" name="profile_picture" class="form-control">
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+        </form>
+
+        <p class="mt-3 text-center">Already have an account? 
+            <a href="{% url 'users:login' %}" class="text-primary">Login</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var registerForm = document.getElementById("registerForm");
+        var identifier = document.getElementById("identifier");
+        var password1 = document.getElementById("password1");
+        var password2 = document.getElementById("password2");
+        var roleSelect = document.getElementById("roleSelect");
+        var authorFields = document.getElementById("author-fields");
+
+        var identifierError = document.getElementById("identifierError");
+        var passwordError = document.getElementById("passwordError");
+        var confirmPasswordError = document.getElementById("confirmPasswordError");
+        var roleError = document.getElementById("roleError");
+
+        function toggleAuthorFields() {
+            authorFields.classList.toggle("d-none", roleSelect.value !== "author");
+        }
+
+        roleSelect.addEventListener("change", toggleAuthorFields);
+        toggleAuthorFields();
+
+        registerForm.addEventListener("submit", function (event) {
+            event.preventDefault(); 
+            var isValid = true;
+
+            identifierError.classList.add("d-none");
+            passwordError.classList.add("d-none");
+            confirmPasswordError.classList.add("d-none");
+            roleError.classList.add("d-none");
+
+            if (!identifier.value.trim()) {
+                identifierError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (password1.value.trim().length < 6) {
+                passwordError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (!password2.value.trim()) {
+                confirmPasswordError.textContent = "Confirm Password is required.";
+                confirmPasswordError.classList.remove("d-none");
+                isValid = false;
+            } else if (password2.value !== password1.value) {
+                confirmPasswordError.textContent = "Passwords do not match.";
+                confirmPasswordError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (!roleSelect.value) {
+                roleError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (isValid) {
+                registerForm.submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

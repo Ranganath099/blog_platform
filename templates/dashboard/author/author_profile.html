@@ -1,0 +1,51 @@
+{% extends "dashboard/author/author_dashboard.html" %}
+
+{% block dashboard_content %}
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Update Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group mb-3">
+                            <label for="id_username">Username</label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="id_age">Age</label>
+                            {{ form.age }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="id_place">Place</label>
+                            {{ form.place }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="id_profile_picture">Profile Picture</label>
+                            {% if profile.profile_picture %}
+                                <div class="mb-2">
+                                    <img src="{{ profile.profile_picture.url }}" class="img-thumbnail" width="100">
+                                </div>
+                            {% else %}
+                                <p class="text-muted">No profile picture uploaded.</p>
+                            {% endif %}
+                            {{ form.profile_picture }}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

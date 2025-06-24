@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superuser Dashboard</title>    
+    <!-- Link Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/superuser_dashboard.css' %}">
+
+</head>
+{% block content %}
+<div class="container-fluid my-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'users:superuser_dashboard' %}" class="list-group-item list-group-item-action">Dashboard Overview</a>
+                <a href="{% url 'users:users_list' %}" class="list-group-item list-group-item-action">Regular Users</a>
+                <a href="{% url 'users:author_list' %}" class="list-group-item list-group-item-action">Authors</a>
+                <a href="{% url 'users:post_list' %}" class="list-group-item list-group-item-action">Posts</a>
+                {% comment %} <a href="{% url 'users:post_detail' post.id %}" class="list-group-item list-group-item-action">PostDetail</a>  {% endcomment %}
+
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% block dashboard_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

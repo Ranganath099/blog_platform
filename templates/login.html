@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-center min-vh-100  bg-gradient">
+    
+    <div class="bg-white p-4 rounded-3 shadow-lg w-50">
+        <h2 class="text-center text-dark mb-4">Welcome Back</h2>
+
+        <form method="POST" id="loginForm">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger p-2">
+                    {% for error in form.non_field_errors %}
+                        <p class="mb-0">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label class="form-label">Email or Phone</label>
+                <input type="text" name="identifier" id="identifier" class="form-control">
+                <p class="text-danger small d-none" id="identifierError">This field is required.</p>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control">
+                <p class="text-danger small d-none" id="passwordError">This field is required.</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <p class="mt-3 text-center">Don't have an account? 
+            <a href="{% url 'users:register' %}" class="text-primary">Sign up</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            let isValid = true;
+
+            let identifier = document.getElementById("identifier");
+            let password = document.getElementById("password");
+
+            let identifierError = document.getElementById("identifierError");
+            let passwordError = document.getElementById("passwordError");
+
+            identifierError.classList.add("d-none");
+            passwordError.classList.add("d-none");
+
+            if (identifier.value.trim() === "") {
+                identifierError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (password.value.trim() === "") {
+                passwordError.classList.remove("d-none");
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</div>
+{% endblock  %}

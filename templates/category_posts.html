@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Filter Posts by Category</h2>
+<form method="GET" action="">
+    <label>Select Category:</label>
+    <select name="category_name" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+            <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<h2>Posts</h2>
+{% if posts %}
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.content }}</p>
+                <p><strong>Category:</strong> {{ post.category.name }}</p>
+                <p><strong>Author:</strong> {{ post.author.username }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts found in this category.</p>
+{% endif %}
+
+{% endblock %}

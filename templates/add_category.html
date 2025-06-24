@@ -1,0 +1,20 @@
+
+    <h2>Add a New Category</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  {# Render form fields #}
+        <button type="submit">Add Category</button>
+    </form>
+
+    <hr>
+
+    <h3>Existing Categories</h3>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
+        {% empty %}
+            <li>No categories available.</li>
+        {% endfor %}
+    </ul>
+

@@ -1,0 +1,84 @@
+{% extends "dashboard/author/author_dashboard.html" %}
+{% load static %}
+{% block dashboard_content %}
+<div class="container mt-4">
+    <h2>{{ post.title }}</h2>
+    <p><strong>Created At:</strong> {{ post.created_at|date:"Y-m-d H:i" }}</p>
+    <p><strong>Status:</strong> 
+        {% if post.published %}
+            <span class="badge bg-success">Published</span>
+        {% else %}
+            <span class="badge bg-warning">Draft</span>
+        {% endif %}
+    </p>
+    <p>{{ post.content }}</p>
+
+    <!-- Comment Section -->
+    <div class="card mt-4 comment-section">
+        <div class="card-header">Comments</div>
+        <div class="card-body">
+            {% for comment in comments %}
+                <div class="comment border p-2 mb-2">
+                    <p><strong>
+                        {% if post.author.author_profile.username %}
+                            {{ post.author.author_profile.username }}
+                        {% elif post.author.email %}
+                            {{ post.author.email }}
+                        {% elif post.author.phone_number %}
+                            {{ post.author.phone_number }}
+                        {% else %}
+                            Anonymous
+                        {% endif %}</strong>: {{ comment.content }}
+                    </p>
+                    <p class="text-muted"><small>{{ comment.created_at }}</small></p>
+
+                    <!-- Delete Comment Button -->
+                    {% if request.user == comment.user or request.user.is_superuser or request.user.role == "author" %}
+                        <form action="{% url 'users:delete_comment' comment.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    {% endif %}
+
+                    
+
+                    <!-- Reply Button -->
+                    <button class="btn btn-sm btn-primary reply-toggle" data-comment-id="{{ comment.id }}">Reply</button>
+
+                    <!-- Reply Form (Hidden by Default) -->
+                    <form method="POST" action="{% url 'users:author_dashboard_post_detail' post.id %}" class="reply-form d-none mt-2" id="reply-form-{{ comment.id }}">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <textarea name="content" class="form-control mb-2" placeholder="Write your reply..." required></textarea>
+                        <button type="submit" class="btn btn-success btn-sm">Submit Reply</button>
+                       
+                    </form>
+
+                    <!-- Nested Replies -->
+                    {% include "dashboard/author/comment_replies.html" with replies=comment.replies.all %}
+                </div>
+            {% empty %}
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Add Comment Form -->
+    {% if user.is_authenticated %}
+        <div class="card-footer">
+            <form method="POST" action="{% url 'users:author_dashboard_post_detail' post.id %}">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <textarea name="content" class="form-control" rows="2" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+            </form>
+        </div>
+    {% else %}
+        <p class="text-muted text-center">You must be logged in to comment.</p>
+    {% endif %}
+
+    <a href="{% url 'users:author_dashboard_my_posts' %}" class="btn btn-secondary mt-3">Back to Posts</a>
+</div>
+<script src="{% static 'js/comment_replies.js' %}" defer></script>
+{% endblock %}

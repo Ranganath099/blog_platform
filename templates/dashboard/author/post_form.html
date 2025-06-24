@@ -1,0 +1,29 @@
+{% extends "dashboard/author/author_dashboard.html" %}
+
+{% block dashboard_content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if post %}Edit Post{% else %}Create Post{% endif %}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            {{ form.category }}
+        </div>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">{{ form.title.label }}</label>
+            {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">{{ form.content.label }}</label>
+            {{ form.content }}
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Post</button> 
+        <a href="{% url 'users:author_dashboard_my_posts' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

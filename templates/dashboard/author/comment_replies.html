@@ -1,0 +1,39 @@
+{% for reply in replies %}
+    <div class="reply-box ms-4 border p-2 mt-2">
+        <p><strong></strong>
+            {% if reply.user.username %}
+                {{ reply.user.username }}
+            {% elif reply.user.email %}
+                {{ reply.user.email }}
+            {% elif reply.user.phone_number %}
+                {{ reply.user.phone_number }}
+            {% else %}
+                Anonymous
+            {% endif %}: {{ reply.content }}
+        </p>
+        <p class="text-muted"><small>{{ reply.created_at }}</small></p>
+
+        <!-- Delete Reply -->
+        {% if request.user == reply.user or request.user.is_superuser or request.user.role == "author" %}
+            <form action="{% url 'users:delete_comment' reply.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        {% endif %}
+
+        <!-- Reply Button -->
+        <button class="btn btn-sm btn-primary reply-toggle" data-comment-id="{{ reply.id }}">Reply</button>
+
+        <!-- Reply Form (Hidden by Default) -->
+        <form method="POST" action="{% url 'users:author_dashboard_post_detail' post.id %}" class="reply-form d-none mt-2" id="reply-form-{{ reply.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ reply.id }}">
+            <textarea name="content" class="form-control mb-2" placeholder="Write your reply..." required></textarea>
+            <button type="submit" class="btn btn-success btn-sm">Submit Reply</button>
+           
+        </form>
+
+        <!-- Recursive Nested Replies -->
+        {% include "dashboard/author/comment_replies.html" with replies=reply.replies.all %}
+    </div>
+{% endfor %}

@@ -1,0 +1,92 @@
+{% extends "dashboard/author/author_dashboard.html" %}
+{% block dashboard_content %}
+
+<div class="container mt-4">
+    <h2>Post Analytics</h2>
+
+    <div class="row">
+        <!-- Statistics Cards -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Published Posts</h5>
+                    <p class="card-text display-4">{{ published_posts }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Draft Posts</h5>
+                    <p class="card-text display-4">{{ draft_posts }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Posts</h5>
+                    <p class="card-text display-4">{{ total_posts }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Views</h5>
+                    <p class="card-text display-4">{{ total_views }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="postStatusChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="monthlyPostChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Post Status Chart
+    var ctx1 = document.getElementById('postStatusChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Published', 'Draft'],
+            datasets: [{
+                label: 'Number of Posts',
+                data: [{{ published_posts }}, {{ draft_posts }}],
+                backgroundColor: ['#28a745', '#ffc107'],
+                borderWidth: 1
+            }]
+        }
+    });
+
+    // Monthly Posts Chart
+    var ctx2 = document.getElementById('monthlyPostChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [{% for month in months %} "{{ month }}", {% endfor %}],
+            datasets: [{
+                label: 'Posts Created',
+                data: [{% for count in monthly_post_counts %} {{ count }}, {% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

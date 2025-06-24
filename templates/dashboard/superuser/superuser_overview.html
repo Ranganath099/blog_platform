@@ -1,0 +1,52 @@
+{% extends "dashboard/superuser/superuser_dashboard.html" %}
+{% block dashboard_content %}
+<div id="page-content-wrapper" class="container-fluid p-4">
+    <h1 class="mb-4">Dashboard Overview</h1>
+
+    {% if view == 'overview' %}
+    <div class="row">
+        <!-- Users - Bar Chart (Active vs Inactive) -->
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="text-center">Users Overview</h5>
+                <canvas id="usersChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5 class="text-center">Authors & Posts Overview</h5>
+                <canvas id="authorsPostsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    {% if view == 'overview' %}
+    var ctx1 = document.getElementById('usersChart').getContext('2d');
+    var usersChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Users'],
+            datasets: [
+                { label: 'Active Users', data: [{{ active_users }}], backgroundColor: '#28a745' },
+                { label: 'Inactive Users', data: [{{ total_users|default:0 }} - {{ active_users|default:0 }}], backgroundColor: '#dc3545' }
+            ]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    var ctx2 = document.getElementById('authorsPostsChart').getContext('2d');
+    var authorsPostsChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Active Authors', 'Total Posts'],
+            datasets: [{ label: 'Count', data: [{{ active_authors }}, {{ total_posts }}], backgroundColor: ['#007bff', '#ffc107'] }]
+        }
+    });
+    {% endif %}
+</script>
+{% endblock %}
+

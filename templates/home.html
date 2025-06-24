@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<title>Home Page</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+/* Hero Section */
+.hero {
+    background: url('{% static "images/herobackground.jpg" %}') no-repeat center center/cover;
+    color: #fff;
+    padding: 100px 0;
+    text-align: center;
+}
+
+/* Animation Classes */
+.fade-in {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.slide-up {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.slide-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.slide-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+/* Make elements visible when they come into view */
+.visible {
+    opacity: 1 !important;
+    transform: translateX(0) translateY(0) !important;
+}
+</style>
+
+<body data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="50" tabindex="0">
+
+<!-- Hero Section -->
+<section class="hero fade-in">
+    <div class="container">
+        <h1>Welcome to Our Home Page</h1>
+        <p class="lead">Discover exciting content, services, and opportunities with us.</p>
+    </div>
+</section>
+
+<!-- Latest Posts Section -->
+<section class="fade-in">
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Latest Posts</h2>
+        <div class="row justify-content-center">
+            {% for post in posts %}
+            <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch slide-up">
+                <div class="card h-100 shadow-sm">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                    {% else %}
+                        <img src="{% static "images/hero.jpg" %}" class="card-img-top" alt="Default image">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text flex-grow-1">
+                            {% if user.is_authenticated %}
+                                {{ post.content|truncatewords:20 }} 
+                            {% else %}
+                                {{ post.content|truncatewords:10 }} 
+                            {% endif %}
+                        </p>
+
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'users:post_detail' post.id %}" class="btn btn-primary mt-auto">Read More</a>
+                        {% else %}
+                            <a href="{% url 'users:login' %}" class="btn btn-primary mt-auto">Read More</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No posts available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- About Us Section -->
+<section id="about" class="container my-5 fade-in">
+    <div class="row align-items-center">
+        <div class="col-md-6 slide-left">
+            <h2>About Us</h2>
+            <p>We are committed to providing the best services and experiences for our users.</p>
+            <button class="btn btn-outline-primary">Learn More</button>
+        </div>
+        <div class="col-md-6 slide-right">
+            <img src="{% static "images/hero.jpg" %}" alt="About Us Image" class="img-fluid rounded">
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="bg-light py-5 fade-in">
+    <div class="container">
+        <h2 class="text-center mb-4 slide-up">Our Blogging Services</h2>
+        <p class="text-center">We offer various services to help writers and businesses create and promote high-quality content.</p>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4 slide-left">
+                <img src="{% static 'images/content_writing.jpg' %}" class="img-fluid rounded mb-3" alt="Content Writing">
+                <h5>Content Writing</h5>
+            </div>
+            <div class="col-md-4 mb-4 slide-up">
+                <img src="{% static 'images/guest_post.jpeg' %}" class="img-fluid rounded mb-3" alt="Guest Posting">
+                <h5>Guest Posting</h5>
+            </div>
+            <div class="col-md-4 mb-4 slide-right">
+                <img src="{% static 'images/guest_post.jpeg' %}" class="img-fluid rounded mb-3" alt="Content Strategy">
+                <h5>Content Strategy</h5>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5 text-center fade-in">
+    <div class="container">
+        <h2 class="slide-up">Contact Us</h2>
+        <p>Have questions or want to collaborate? Reach out to us!</p>
+        <div class="row">
+            <div class="col-md-6 slide-left">
+                <img src="{% static 'images/contact_us.jpg' %}" class="img-fluid rounded mb-3" alt="Contact Us">
+            </div>
+            <div class="col-md-6 text-start slide-right">
+                <h5>Get in Touch</h5>
+                <p>Email: support@myblog.com</p>
+                <form>
+                    <div class="mb-3">
+                        <label for="contactName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="contactName" placeholder="Enter your Name">
+                    </div>
+                    <div>
+                        <label for="contactEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="contactEmail" placeholder="Enter your email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let elements = document.querySelectorAll(".fade-in, .slide-up, .slide-left, .slide-right");
+
+    function checkScroll() {
+        elements.forEach(function(element) {
+            let position = element.getBoundingClientRect().top;
+            let windowHeight = window.innerHeight;
+
+            if (position < windowHeight - 50) {
+                element.classList.add("visible");
+            }
+        });
+    }
+
+    window.addEventListener("scroll", checkScroll);
+    checkScroll();
+});
+</script>
+
+{% endblock %}
