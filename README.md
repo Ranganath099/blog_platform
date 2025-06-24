@@ -26,19 +26,17 @@ A powerful blog platform built with Django featuring role-based access. Admins a
 ## 📁 Project Structure
 
 blog_platform/
-├── blog/ # Main blog app (views, templates, models)
-├── post/ # Handles blog post creation/editing
-├── users/ # Handles authentication and custom user roles
-├── media/ # Uploaded media (images)
-├── staticfiles/ # Static assets (CSS/JS/fonts)
-├── templates/ # Shared HTML templates
-├── manage.py
-├── db.sqlite3
-├── requirements.txt
+- ├── blog/ # Main blog app (views, templates, models)
+- ├── post/ # Handles blog post creation/editing
+- ├── users/ # Handles authentication and custom user roles
+- ├── media/ # Uploaded media (images)
+- ├── staticfiles/ # Static assets (CSS/JS/fonts)
+- ├── templates/ # Shared HTML templates
+- ├── manage.py
+- ├── db.sqlite3
+- ├── requirements.txt
 
-bash
-Copy
-Edit
+
 
 ## ⚙️ Getting Started
 
@@ -47,32 +45,22 @@ Edit
 git clone https://github.com/Ranganath099/blog_platform.git
 cd blog_platform
 2. Set Up Virtual Environment
-bash
-Copy
-Edit
+
 python -m venv venv
 venv\Scripts\activate   # Windows
 # source venv/bin/activate  # macOS/Linux
 3. Install Dependencies
-bash
-Copy
-Edit
+
 pip install -r requirements.txt
 4. Apply Migrations
-bash
-Copy
-Edit
+
 python manage.py makemigrations
 python manage.py migrate
 5. Create Superuser
-bash
-Copy
-Edit
+
 python manage.py createsuperuser
 6. Run Development Server
-bash
-Copy
-Edit
+
 python manage.py runserver
 Access:
 
@@ -98,9 +86,6 @@ This project is licensed under the MIT License.
 
 Made with 💻 by Ranganath B
 
-yaml
-Copy
-Edit
 
 ---
 
